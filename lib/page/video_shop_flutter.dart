@@ -204,10 +204,6 @@ class _VideoShopFlutterState extends State<VideoShopFlutter> {
               (currentPage ~/ widget.pageSize),
               widget.pageSize,
             );
-            widget.loadMore(
-              (currentPage+1 ~/ widget.pageSize),
-              widget.pageSize,
-            );
           }
         }
       }
