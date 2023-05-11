@@ -199,14 +199,14 @@ class _VideoShopFlutterState extends State<VideoShopFlutter> {
       if (_pageController.page != null) {
         if (_pageController.page!.round() != currentPage) {
           currentPage = _pageController.page!.round();
-          if (currentPage == widget.listData.length - (widget.pageSize)) {
+          if (currentPage == widget.listData.length - (widget.pageSize/6)) {
             widget.loadMore(
               (currentPage ~/ widget.pageSize),
               widget.pageSize,
             );
             widget.loadMore(
-              (currentPage ~/ widget.pageSize+1),
-              widget.pageSize+1,
+              (currentPage+1 ~/ widget.pageSize),
+              widget.pageSize,
             );
           }
         }
