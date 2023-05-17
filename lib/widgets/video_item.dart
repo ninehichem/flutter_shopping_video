@@ -92,7 +92,7 @@ class _VideoItemState extends State<VideoItem> {
               fit: BoxFit.fitWidth,
             ),
             onVisibilityChanged: (info) {
-              if (info.visibleFraction > 0.6) {
+              if (info.visibleFraction > 0.2) {
                 _videoController =
                     VideoPlayerController.network(widget.video.url)
                       ..initialize().then(
