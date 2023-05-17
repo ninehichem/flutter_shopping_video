@@ -46,6 +46,7 @@ class VideoPage extends StatelessWidget {
     required this.index,
     required this.updateLastSeenPage,
     this.enableBackgroundContent = false,
+    required this.listData
   }) : super(key: key);
   final VideoModel video;
   final Widget Function(VideoModel? video)? customVideoInfo;
@@ -64,6 +65,7 @@ class VideoPage extends StatelessWidget {
   final int index;
   final Function(int lastSeenPage)? updateLastSeenPage;
   final bool? enableBackgroundContent;
+  final List<Map<String, dynamic>> listData;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -78,6 +80,7 @@ class VideoPage extends StatelessWidget {
               videoWatched: videoWatched,
               index: index,
               updateLastSeenPage: updateLastSeenPage,
+              listData: listData,
             ),
           ),
           // Background content.

@@ -1,3 +1,5 @@
+import 'package:video_player/video_player.dart';
+
 class VideoModel {
   int? id;
   String? user;
@@ -13,6 +15,7 @@ class VideoModel {
   String? productName;
   String? productPermalink;
   String? stockStatus;
+  VideoPlayerController? controller;
 
   VideoModel({
     this.id,
@@ -29,6 +32,7 @@ class VideoModel {
     this.productName,
     this.productPermalink,
     this.stockStatus = 'instock',
+    this.controller
   });
 
   VideoModel.fromJson(Map<dynamic, dynamic> json)

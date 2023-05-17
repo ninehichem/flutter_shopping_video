@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 import 'package:video_shop_flutter/model/video_model.dart';
 import 'package:video_shop_flutter/page/video_page.dart';
 
@@ -188,9 +189,62 @@ class _VideoShopFlutterState extends State<VideoShopFlutter> {
 
   @override
   void initState() {
+    VideoModel currentvideo = VideoModel.fromJson(widget.listData[currentPage]);
     _pageController = PageController(initialPage: widget.lastSeenPage ?? 0);
+      for (int i = 0; i < 2 && i < widget.listData.length; i++) {
+    currentvideo.controller = VideoPlayerController.network(currentvideo.url)
+      ..initialize().then((_) {
+        if (i == 0) {
+          // Start playing the first video
+          currentvideo.controller?.play();
+        } else {
+          // Preload the second video
+          preloadNextVideo(i);
+        }
+      });
+  }
     super.initState();
   }
+
+  void preloadNextVideo(int currentIndex) {
+  final nextIndex = currentIndex + 1;
+  if (nextIndex < widget.listData.length) {
+    final nextVideo = VideoModel.fromJson(widget.listData[nextIndex]);
+    if (nextVideo.controller == null) {
+      nextVideo.controller = VideoPlayerController.network(nextVideo.url)
+        ..initialize().then((_) {
+          // Start preloading the video, but pause it immediately
+          nextVideo.controller?.pause();
+        });
+    }
+  }
+}
+
+  void playNextVideo(int currentIndex) {
+  final currentVideo = VideoModel.fromJson(widget.listData[currentIndex]);
+  final nextIndex = currentIndex + 1;
+
+  currentVideo.controller?.dispose();
+  currentVideo.controller = null;
+
+  if (nextIndex < widget.listData.length) {
+    final nextVideo = VideoModel.fromJson(widget.listData[nextIndex]);
+    if (nextVideo.controller == null) {
+      nextVideo.controller = VideoPlayerController.network(nextVideo.url)
+        ..initialize().then((_) {
+          // Start playing the next video
+          nextVideo.controller?.play();
+          // Preload the video after the next video
+          preloadNextVideo(nextIndex);
+        });
+    } else {
+      // Start playing the next video
+      nextVideo.controller?.play();
+      // Preload the video after the next video
+      preloadNextVideo(nextIndex);
+    }
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -239,8 +293,13 @@ class _VideoShopFlutterState extends State<VideoShopFlutter> {
           informationPadding: widget.informationPadding,
           viewWidget: widget.viewWidget,
           index: index,
+          listData: widget.listData,
         ),
       ),
+      onPageChanged: (value) {
+        playNextVideo(value);
+      },
+    
     );
   }
 }

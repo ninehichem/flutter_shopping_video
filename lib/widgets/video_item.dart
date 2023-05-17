@@ -12,11 +12,13 @@ class VideoItem extends StatefulWidget {
     required this.videoWatched,
     required this.updateLastSeenPage,
     required this.index,
+    required this.listData
   }) : super(key: key);
   final VideoModel video;
   final List<String> videoWatched;
   final Function(int lastSeenPage)? updateLastSeenPage;
   final int index;
+  final List<Map<String, dynamic>> listData;
   @override
   State<VideoItem> createState() => _VideoItemState();
 }
@@ -36,6 +38,8 @@ class _VideoItemState extends State<VideoItem> {
       _videoController = null;
     });
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +96,7 @@ class _VideoItemState extends State<VideoItem> {
               fit: BoxFit.fitWidth,
             ),
             onVisibilityChanged: (info) {
-              if (info.visibleFraction > 0.2) {
+              if (info.visibleFraction > 0.6) {
                 _videoController =
                     VideoPlayerController.network(widget.video.url)
                       ..initialize().then(
