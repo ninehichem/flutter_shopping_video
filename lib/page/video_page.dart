@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 import 'package:video_shop_flutter/video_shop_flutter.dart';
+
+import '../model/category.dart';
 
 final List<Color> gradientBackground = [
   const Color(0xff000000).withOpacity(0.9),
@@ -46,6 +49,8 @@ class VideoPage extends StatelessWidget {
     required this.index,
     required this.updateLastSeenPage,
     this.enableBackgroundContent = false,
+    required this.videoController,
+    this.categories
   }) : super(key: key);
   final VideoModel video;
   final Widget Function(VideoModel? video)? customVideoInfo;
@@ -64,6 +69,11 @@ class VideoPage extends StatelessWidget {
   final int index;
   final Function(int lastSeenPage)? updateLastSeenPage;
   final bool? enableBackgroundContent;
+  final VideoPlayerController videoController;
+  final List<Category>? categories;
+
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -78,6 +88,7 @@ class VideoPage extends StatelessWidget {
               videoWatched: videoWatched,
               index: index,
               updateLastSeenPage: updateLastSeenPage,
+              videoController: videoController,
             ),
           ),
           // Background content.
@@ -111,6 +122,7 @@ class VideoPage extends StatelessWidget {
                     ),
             ),
           ),
+
           // Video actions______________.
           Align(
             alignment: actionsAlign ?? Alignment.bottomRight,

@@ -87,6 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
             id: video?.id,
           );
         },
+        productsVideoControllers: [],
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_shop_flutter/model/video_model.dart';
@@ -12,30 +13,36 @@ class VideoItem extends StatefulWidget {
     required this.videoWatched,
     required this.updateLastSeenPage,
     required this.index,
+    required this.videoController,
   }) : super(key: key);
   final VideoModel video;
   final List<String> videoWatched;
   final Function(int lastSeenPage)? updateLastSeenPage;
   final int index;
+  final VideoPlayerController videoController;
   @override
   State<VideoItem> createState() => _VideoItemState();
 }
 
 class _VideoItemState extends State<VideoItem> {
-  VideoPlayerController? _videoController;
+    VideoPlayerController? _videoController;
 
   @override
-  void dispose() async{
-    super.dispose();
-    if(_videoController != null){
-      if(_videoController!.value.isPlaying){
-        _videoController!.pause();
-      }
-    }
-    await _videoController?.dispose().then((value) {
-      _videoController = null;
-    });
+  void initState() {
+    super.initState();
+    _videoController  = widget.videoController;
   }
+
+
+  // @override
+  // void dispose() async{
+  //   super.dispose();
+  //   if(_videoController != null){
+  //     if(_videoController!.value.isPlaying){
+  //       _videoController!.pause();
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +64,7 @@ class _VideoItemState extends State<VideoItem> {
                 }
               }
               if(visibleInfo.visibleFraction == 0){
-                if(_videoController != null){
+                if(_videoController! != null){
                   if(_videoController!.value.isPlaying){
                     _videoController!.pause();
                   }
@@ -74,18 +81,18 @@ class _VideoItemState extends State<VideoItem> {
             child: Image.network(
               widget.video.thumbnail ?? "",
               loadingBuilder: (context, child, loadingProgress) {
-                return const AspectRatio(
+                return AspectRatio(
                   aspectRatio: 16 / 9,
                   child: Center(
-                    child: Icon(Icons.play_arrow, size: 80, color: Colors.grey),
+                    child:_videoController!.value.isPlaying? const Icon(Icons.play_arrow, size: 80, color: Colors.grey) : const CupertinoActivityIndicator(color: Colors.white,),
                   ),
                 );
               },
               errorBuilder: (context, error, stackTrace) {
-                return const AspectRatio(
+                return AspectRatio(
                   aspectRatio: 16 / 9,
                   child: Center(
-                    child: Icon(Icons.play_arrow, size: 80, color: Colors.grey),
+                    child: _videoController!.value.isPlaying? const Icon(Icons.play_arrow, size: 80, color: Colors.grey) : const CupertinoActivityIndicator(color: Colors.white,),
                   ),
                 );
               },
